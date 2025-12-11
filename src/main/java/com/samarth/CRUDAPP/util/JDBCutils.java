@@ -1,4 +1,4 @@
-package com.samarth.CRUDAPP;
+package com.samarth.CRUDAPP.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
