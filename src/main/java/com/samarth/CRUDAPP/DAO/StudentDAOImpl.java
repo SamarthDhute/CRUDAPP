@@ -49,7 +49,7 @@ public class StudentDAOImpl implements StudentDAO{
             pstmt.executeUpdate();
 
         }catch(SQLException sqle){
-            throw new DAOException("FAILED TO INSERT RECORD",sqle);
+            throw new DAOException("FAILED TO UPDATE RECORD",sqle);
         }
 
     }
@@ -79,6 +79,7 @@ public class StudentDAOImpl implements StudentDAO{
             try (ResultSet resultSet = pstmt.executeQuery()) {
                 if (resultSet.next()) {
                     student = new Student();
+                    student.setId(resultSet.getInt("id"));
                     student.setName(resultSet.getString("name"));
                     student.setEmail(resultSet.getString("email"));
                     student.setMobile(resultSet.getString("mobile"));
