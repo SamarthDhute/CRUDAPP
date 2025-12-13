@@ -94,7 +94,7 @@ public class StudentDAOImpl implements StudentDAO{
 
     @Override
     public List<Student> getAllStudent() {
-        List<Student> studentlist = new ArrayList();
+        List<Student> studentlist = new ArrayList<>();
         try(Connection con = JDBCutils.fetchConnection();
             PreparedStatement pstmt = con.prepareStatement(SELECT_ALL_SQL);
             ResultSet resultset = pstmt.executeQuery()){
