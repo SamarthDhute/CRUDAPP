@@ -27,15 +27,25 @@
 
         <label>Name</label>
         <input type="text" name="name" placeholder="Enter Name"
-         value="<%=(isEdit)? student.getName() : ""%>" required><br>
+         value="<%= (request.getParameter("name")!=null) ? request.getParameter("name") :(isEdit)? student.getName() : ""%>" required><br>
+
+
+          <%String nameError = (String)request.getAttribute("nameError");%>
+          <p class="text-danger"><%= (nameError != null ? nameError : "")%></p>
 
         <label>Email</label>
         <input type="email" name="email" placeholder="Enter Email "
-        value = "<%= (isEdit)? student.getEmail() : "" %>"required><br>
+        value = "<%= (request.getParameter("email")!=null) ? request.getParameter("email") :(isEdit)? student.getEmail() : "" %>"required><br>
+
+         <%String emailError = (String)request.getAttribute("emailError");%>
+         <p class="text-danger"><%= (emailError != null ? emailError : "")%></p>
 
         <label>Mobile</label>
         <input type="text" name="mobile" placeholder="Enter Mobile NO."
-         value = "<%=(isEdit)? student.getMobile() : ""%>"required><br>
+         value = "<%=(request.getParameter("mobile")!=null) ? request.getParameter("mobile") :(isEdit)? student.getMobile() : ""%>"required><br>
+
+          <%String mobileError = (String)request.getAttribute("mobileError");%>
+          <p class="text-danger"><%= (mobileError != null ? mobileError : "")%></p>
 
         <button type="submit">save</button>
         <a href="students">Cancel</a>
