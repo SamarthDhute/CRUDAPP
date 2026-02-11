@@ -1,4 +1,4 @@
-# Student Management System (JSP, Servlet, JDBC)
+<img width="1594" height="726" alt="Screenshot 2026-02-11 134626" src="https://github.com/user-attachments/assets/9dcc1545-58a8-400a-af95-3f2934dfa6d3" /># Student Management System (JSP, Servlet, JDBC)
 
 A simple **Student Management System** built using **Java, JSP, Servlets, and JDBC**. This project demonstrates basic CRUD (Create, Read, Update, Delete) operations using the **DAO design pattern** and follows an MVC-style structure.
 
@@ -95,6 +95,7 @@ private static final String PASSWORD = "your_password";
 
 3. Configure **Apache Tomcat Server**
 
+
 4. Add MySQL JDBC Driver (`mysql-connector-j.jar`) to project build path
 
 5. Start the server
@@ -133,11 +134,12 @@ private static final String PASSWORD = "your_password";
 
 ### Add  Student Page
 
-![alt text](image-3.png)
+<img width="1594" height="726" alt="Screenshot 2026-02-11 134626" src="https://github.com/user-attachments/assets/eeabcabf-3d91-472b-b764-0da5801a7bfe" />
+
 
 ### Edit Page
 
-![alt text](image-4.png)
+<img width="1597" height="727" alt="Screenshot 2026-02-11 134732" src="https://github.com/user-attachments/assets/3b13fed1-a3b3-44bd-89b9-ea7ade3ea32a" />
 
 ---
 
