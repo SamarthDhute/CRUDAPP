@@ -1,4 +1,4 @@
-<img width="1594" height="726" alt="Screenshot 2026-02-11 134626" src="https://github.com/user-attachments/assets/9dcc1545-58a8-400a-af95-3f2934dfa6d3" /># Student Management System (JSP, Servlet, JDBC)
+
 
 A simple **Student Management System** built using **Java, JSP, Servlets, and JDBC**. This project demonstrates basic CRUD (Create, Read, Update, Delete) operations using the **DAO design pattern** and follows an MVC-style structure.
 
