@@ -10,6 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         .hero-section {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
@@ -70,6 +72,12 @@
         <!-- Success Message -->
         <%
             String message = request.getParameter("message");
+            int totalPages = (int) request.getAttribute("totalPages");
+            int currentPage =(int) request.getAttribute("currentPage");
+
+            String param = request.getParameter("pagesize");
+            int pagesize = (param != null) ? Integer.parseInt(param) : (int)request.getAttribute("pageSize");
+
             if(message != null && !message.isEmpty()){
         %>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -129,7 +137,6 @@
                                         </div>
                                     </div>
                                 </td>
-                                <!-- FIXED: Email now FULLY VISIBLE -->
                                 <td class="fw-medium text-break"><%= student.getEmail() %></td>
                                 <td>
                                     <i class="bi bi-telephone-fill me-2 text-muted"></i>
@@ -174,6 +181,97 @@
             </div>
         </div>
     </div>
+
+
+    <div>
+    <!-- GO TO PAGE FORM -->
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="container mt-4 mb-1">
+            <div class=" ms-1">
+                <div class="col-md-6 col-lg-4 text-center">
+                    <form action="students" method="POST" class="d-flex align-items-center gap-1 p-1 bg-white shadow-sm border rounded-2 mx-auto" style="max-width: 180px;">
+                        <label class="form-label mb-0 fw-semibold text-muted small">GO</label>
+                        <input type="number"
+                               name="page"
+                               class="form-control form-control-sm px-3 py-1"
+                               min="1"
+                               max="<%= totalPages %>"
+                               value="<%= currentPage %>"
+                               style="width: 65px; font-size: 0.85rem;"
+                               required>
+                        <button type="submit" class="btn btn-primary btn-sm px-2 py-1 fw-bold">
+                            <i class="fas fa-arrow-right me-1"></i>GO
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+             <div class="ms-4 mt-3">  <!-- ms-4 = 24px left margin -->
+                 <form action="students" method="GET" class="d-flex align-items-center ms-4 mt-3gap-2 p-2 bg-white border rounded-3 shadow-sm" style="max-width: 280px;">
+                     <span class="text-muted fw-semibold small">Show</span>
+                     <select name="pagesize" class="form-select form-select-sm border-primary shadow-none"
+                             onchange="this.form.submit()" style="width: 80px;">
+                         <option value="5" <%= (pagesize==5) ? "selected" : "" %>>5</option>
+                         <option value="10" <%= (pagesize==10) ? "selected" : "" %>>10</option>
+                         <option value="20" <%= (pagesize==20) ? "selected" : "" %>>20</option>
+                         <option value="50" <%= (pagesize==50) ? "selected" : "" %>>50</option>
+                         <option value="100" <%= (pagesize==100) ? "selected" : "" %>>100</option>
+                         <option value="200" <%= (pagesize==200) ? "selected" : "" %>>200</option>
+                     </select>
+                     <span class="text-muted fw-semibold small">entries</span>
+                 </form>
+             </div>
+
+
+      </div>
+
+
+
+        <!-- PAGINATION -->
+        <div class="container">
+            <nav aria-label="Page navigation example" class="mt-3 mb-5">
+                <ul class="pagination justify-content-center">
+                    <!-- First Page -->
+                    <li class="page-item <%= (currentPage == 1) ? "disabled" : "" %>">
+                        <a class="page-link" href="students?page=1&pagesize=<%=pagesize%>">
+                            <i class="fas fa-angle-double-left me-1"></i>First
+                        </a>
+                    </li>
+
+                    <!-- Previous Page -->
+                    <li class="page-item <%= (currentPage == 1) ? "disabled" : "" %>">
+                        <a class="page-link" href=" students?page=<%= currentPage - 1%>&pagesize=<%= pagesize %>">
+                            <i class="fas fa-chevron-left me-1"></i>
+                        </a>
+                    </li>
+
+                    <!-- Page Numbers -->
+                    <% for(int i=1; i<=totalPages; i++) { %>
+                        <li class="page-item <%= i==currentPage ? "active" : "" %>">
+                            <a class="page-link" href="students?page=<%= i %>&pagesize=<%= pagesize %>"><%= i %></a>
+                        </li>
+                    <% } %>
+
+                    <!-- Next Page -->
+                    <li class="page-item <%= (currentPage == totalPages) ? "disabled" : "" %>">
+                        <a class="page-link" href="students?page=<%= currentPage + 1%>&pagesize=<%= pagesize  %>">
+                            <i class="fas fa-chevron-right me-1"></i>
+                        </a>
+                    </li>
+
+                    <!-- Last Page -->
+                    <li class="page-item <%= (currentPage == totalPages) ? "disabled" : "" %>">
+                        <a class="page-link" href="students?page=<%= totalPages%>&pagesize=<%= pagesize  %>">
+                            Last <i class="fas fa-angle-double-right ms-1"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+
 
     <!-- Bootstrap 5.3 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

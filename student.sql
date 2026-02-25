@@ -1,8 +1,5 @@
-DROP DATABASE IF EXISTS cruddb;
-CREATE DATABASE cruddb;
-
-\c cruddb
 DROP TABLE IF EXISTS student;
+
 CREATE TABLE student (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
@@ -15,5 +12,6 @@ INSERT INTO student(name,email,mobile) VALUES('gaurav','gaurav@gmail.com',765456
 INSERT INTO student(name,email,mobile) VALUES('vivek','vivek@gmail.com',9876567890);
 
 SELECT * FROM student;
+
 
 

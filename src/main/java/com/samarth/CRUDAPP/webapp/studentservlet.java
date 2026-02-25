@@ -5,6 +5,7 @@ import com.samarth.CRUDAPP.DAO.StudentDAO;
 import com.samarth.CRUDAPP.DAO.StudentDAOImpl;
 import com.samarth.CRUDAPP.Exception.DAOException;
 import com.samarth.CRUDAPP.Model.Student;
+import com.samarth.CRUDAPP.Model.Pagination;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,6 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static java.lang.Math.*;
 
 @WebServlet(urlPatterns = {"/","/students"})
 public class studentservlet extends HttpServlet {
@@ -63,8 +66,37 @@ public class studentservlet extends HttpServlet {
     }
 
     private void listStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Student> studentlist = DAO.getAllStudent();
+        int pagenumber = 1;
+        int pagesize = 5;
+
+        if(req.getParameter("page") != null) {
+            pagenumber = Integer.parseInt(req.getParameter("page"));
+        }
+
+        if(req.getParameter("pagesize") != null) {
+            pagesize = Integer.parseInt(req.getParameter("pagesize"));
+        }
+        Pagination pagination = new Pagination(pagenumber,pagesize);
+
+        int totalRecords =DAO.getToatalRecords();
+        int totalPages =  (int) ceil((double) totalRecords/pagesize);
+
+        if(pagenumber<1)
+            pagination.setPagenumber(1);
+        if(pagenumber> totalPages)
+            pagination.setPagenumber(totalPages);
+
+
+        List<Student> studentlist = DAO.getSelectedStudent(pagination);
+
+
+
+        req.setAttribute("totalPages",totalPages);
         req.setAttribute("studentlist",studentlist);
+        req.setAttribute("currentPage",pagenumber);
+        req.setAttribute("pageSize",pagesize);
+
+
         req.getRequestDispatcher("student-List.jsp").forward(req,resp);
     }
 

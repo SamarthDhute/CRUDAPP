@@ -1,6 +1,7 @@
 package com.samarth.CRUDAPP.DAO;
 
 import com.samarth.CRUDAPP.Exception.DAOException;
+import com.samarth.CRUDAPP.Model.Pagination;
 import com.samarth.CRUDAPP.Model.Student;
 import com.samarth.CRUDAPP.util.JDBCutils;
 
@@ -17,6 +18,9 @@ public class StudentDAOImpl implements StudentDAO{
     private static final String DELETE_SQL = "DELETE FROM student WHERE id = ?";
     private static final String SELECT_BY_ID_SQL = "SELECT * FROM student WHERE id = ?";
     private static final String SELECT_ALL_SQL = "SELECT * FROM student ORDER BY id";
+    private static final String SELECT_STUDENT = "SELECT id,name, email, mobile FROM student ";
+    private static final String PAGINATION_SQL = " LIMIT ? OFFSET ?";
+    private static final String COUNT_SQL = "SELECT COUNT(*) FROM student";
 
 
     @Override
@@ -93,12 +97,18 @@ public class StudentDAOImpl implements StudentDAO{
     }
 
     @Override
-    public List<Student> getAllStudent() {
+    public List<Student> getSelectedStudent(Pagination pagination) {
+        String sql = SELECT_STUDENT + PAGINATION_SQL;
+
         List<Student> studentlist = new ArrayList<>();
         try(Connection con = JDBCutils.fetchConnection();
-            PreparedStatement pstmt = con.prepareStatement(SELECT_ALL_SQL);
-            ResultSet resultset = pstmt.executeQuery()){
+            PreparedStatement pstmt = con.prepareStatement(sql)){
 
+            pstmt.setInt(1,pagination.getPagesize());
+            pstmt.setInt(2,pagination.getOffest());
+
+
+            ResultSet resultset = pstmt.executeQuery();
             while(resultset.next()){
                 Student student = new Student();
                 student.setId(resultset.getInt("id"));
@@ -114,4 +124,24 @@ public class StudentDAOImpl implements StudentDAO{
         }
         return studentlist;
     }
+
+    @Override
+    public int getToatalRecords(){
+        try(Connection con = JDBCutils.fetchConnection();
+            PreparedStatement pstmt = con.prepareStatement(COUNT_SQL)){
+
+            try (ResultSet resultset = pstmt.executeQuery()) {
+
+                if (resultset.next()) {
+                    return resultset.getInt(1);  // Get count directly as int
+                }
+            }
+
+
+        }catch(SQLException sqle){
+            throw new DAOException("FAILED TO GET TOTAL STUDENT RECORDS",sqle);
+        }
+        return 0;
+    }
+
 }
