@@ -59,14 +59,17 @@
                     </p>
                 </div>
                 <div class="col-lg-4 text-center text-lg-end">
-                    <a href="student?action=add" class="btn btn-light btn-xl px-5 py-3 shadow-lg border-0 fw-bold fs-5">
+                    <a href="students?action=add" class="btn btn-light btn-xl px-5 py-3 shadow-lg border-0 fw-bold fs-5">
                         <i class="bi bi-plus-circle-fill me-3" style="font-size: 1.5rem;"></i>
                         Add New Student
                     </a>
                 </div>
             </div>
+
         </div>
     </section>
+
+ <jsp:include page="header.jsp"/>
 
     <div class="container">
         <!-- Success Message -->
@@ -87,8 +90,11 @@
         </div>
         <% } %>
 
+
+
         <!-- Students Table -->
         <div class="card shadow-lg border-0">
+
             <div class="card-header bg-gradient py-4" style="background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%); color: white;">
                 <div class="row align-items-center">
                     <div class="col">
@@ -144,12 +150,12 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group" role="group">
-                                        <a href="student?action=edit&id=<%= student.getId() %>"
+                                        <a href="students?action=edit&id=<%= student.getId() %>"
                                            class="btn btn-sm btn-outline-primary"
                                            title="Edit Student">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <a href="student?action=delete&id=<%= student.getId() %>"
+                                        <a href="students?action=delete&id=<%= student.getId() %>"
                                            class="btn btn-sm btn-outline-danger"
                                            onclick="return confirm('Are you sure you want to delete <%= student.getName() %>?')"
                                            title="Delete Student">
@@ -168,7 +174,7 @@
                                         <i class="bi bi-people display-1 mb-4 d-block"></i>
                                         <h4 class="mb-3">No students found</h4>
                                         <p class="mb-4">Get started by adding your first student above.</p>
-                                        <a href="student?action=add" class="btn btn-primary btn-lg px-4">
+                                        <a href="students?action=add" class="btn btn-primary btn-lg px-4">
                                             <i class="bi bi-plus-circle me-2"></i>Add First Student
                                         </a>
                                     </div>
@@ -208,7 +214,7 @@
 
         </div>
              <div class="ms-4 mt-3">  <!-- ms-4 = 24px left margin -->
-                 <form action="students" method="GET" class="d-flex align-items-center ms-4 mt-3gap-2 p-2 bg-white border rounded-3 shadow-sm" style="max-width: 280px;">
+                 <form action="students?page=<%= currentPage%>" method="GET" class="d-flex align-items-center ms-4 mt-3gap-2 p-2 bg-white border rounded-3 shadow-sm" style="max-width: 280px;">
                      <span class="text-muted fw-semibold small">Show</span>
                      <select name="pagesize" class="form-select form-select-sm border-primary shadow-none"
                              onchange="this.form.submit()" style="width: 80px;">

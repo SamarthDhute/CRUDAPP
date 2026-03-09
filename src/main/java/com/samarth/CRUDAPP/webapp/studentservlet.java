@@ -19,12 +19,12 @@ import java.util.regex.Pattern;
 
 import static java.lang.Math.*;
 
-@WebServlet(urlPatterns = {"/","/students"})
+@WebServlet(urlPatterns = {"/students"})
 public class studentservlet extends HttpServlet {
     StudentDAO DAO;
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init() throws ServletException {
         DAO = new StudentDAOImpl();
     }
 
@@ -109,8 +109,9 @@ public class studentservlet extends HttpServlet {
 
     void showAddForm(HttpServletRequest req,HttpServletResponse resp) throws ServletException, IOException {
 
-        req.getRequestDispatcher("student-Form.jsp").forward(req,resp);
-        //resp.sendRedirect("student-Form.jsp");
+        //req.getRequestDispatcher("student-Form.jsp").forward(req,resp);
+        //req.getRequestDispatcher("student-Form.jsp").forward(req, resp);
+        resp.sendRedirect("student-Form.jsp");
     }
 
     void insertStudent(HttpServletRequest req,HttpServletResponse resp) throws ServletException, IOException{
