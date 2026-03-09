@@ -19,9 +19,14 @@ SELECT * FROM student;
   id serial primary key,
   name varchar(200)  not null,
   email varchar(100) not null,
-  useName varchar(100) unique not null,
+  userName varchar(100) unique not null,
   password varchar(100)not null
   );
+
+  INSERT INTO users(name,email,userName,password) VALUES('samarth','samarth@gmail.com','admin','admin123');
+
+  SELECT * FROM users;
+
 
 
 
