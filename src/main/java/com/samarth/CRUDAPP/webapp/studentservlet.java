@@ -22,6 +22,7 @@ import static java.lang.Math.*;
 @WebServlet(urlPatterns = {"/students"})
 public class studentservlet extends HttpServlet {
     StudentDAO DAO;
+    String search;
 
     @Override
     public void init() throws ServletException {
@@ -36,6 +37,7 @@ public class studentservlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
+        search = (String) req.getParameter("search");
 
 
         if (action == null) action = "list";
@@ -68,6 +70,9 @@ public class studentservlet extends HttpServlet {
     private void listStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int pagenumber = 1;
         int pagesize = 5;
+        List<Student> studentlist;
+
+
 
         if(req.getParameter("page") != null) {
             pagenumber = Integer.parseInt(req.getParameter("page"));
@@ -86,10 +91,16 @@ public class studentservlet extends HttpServlet {
         if(pagenumber> totalPages)
             pagination.setPagenumber(totalPages);
 
+        if (search != null && !search.trim().isEmpty()) {
+            String type= detectSearchType(search);
+            studentlist = DAO.searchStudents(search.trim(),type,pagination); // smart search
 
-        List<Student> studentlist = DAO.getSelectedStudent(pagination);
+             totalRecords =DAO.getSearchedTotalRecords(search,type); //TOTAL RECORDS ( SEARCHED RESULT )
+             totalPages =  (int) ceil((double) totalRecords/pagesize);
 
-
+        } else {
+            studentlist= DAO.getSelectedStudent(pagination);
+        }
 
         req.setAttribute("totalPages",totalPages);
         req.setAttribute("studentlist",studentlist);
@@ -174,6 +185,34 @@ public class studentservlet extends HttpServlet {
         }
 
         return isValid;
+    }
+
+    public static String detectSearchType(String keyword) {
+
+        // @ → EMAIL
+        if (keyword.contains("@")) {
+            return "email";
+        }
+
+        //  all digits AND length between 7–15 → MOBILE
+        // (phone numbers are purely numeric, 7 to 15 digits worldwide)
+        if (keyword.matches("\\d{7,15}")) {
+            return "mobile";
+        }
+
+        //  starts with + followed by digits → MOBILE (+91 9876543210)
+        if (keyword.matches("\\+\\d{1,15}")) {
+            return "mobile";
+        }
+
+        // partial digits (less than 7) → still MOBILE partial search
+        // e.g. user types "98765" to find numbers starting with that
+        if (keyword.matches("\\d{4,6}")) {
+            return "mobile";
+        }
+
+        //  everything else → NAME
+        return "name";
     }
 
 

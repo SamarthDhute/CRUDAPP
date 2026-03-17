@@ -12,4 +12,7 @@ public interface StudentDAO {
     Student getStudentByID(int id);
     List<Student> getSelectedStudent(Pagination pagination);
     int getToatalRecords();
+    List<Student> searchStudents(String search,String type,Pagination pagination);
+    int getSearchedTotalRecords(String search,String type);
+
 }

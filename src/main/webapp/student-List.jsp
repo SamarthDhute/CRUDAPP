@@ -79,6 +79,7 @@
             int currentPage =(int) request.getAttribute("currentPage");
 
             String param = request.getParameter("pagesize");
+
             int pagesize = (param != null) ? Integer.parseInt(param) : (int)request.getAttribute("pageSize");
 
             if(message != null && !message.isEmpty()){
@@ -189,46 +190,69 @@
     </div>
 
 
-    <div>
-    <!-- GO TO PAGE FORM -->
+    <div class="container mt-4 mb-1">
+    <!-- GO | SEARCH | PAGESIZE ROW -->
       <div class="d-flex align-items-center justify-content-between mb-3">
-        <div class="container mt-4 mb-1">
-            <div class=" ms-1">
-                <div class="col-md-6 col-lg-4 text-center">
-                    <form action="students" method="POST" class="d-flex align-items-center gap-1 p-1 bg-white shadow-sm border rounded-2 mx-auto" style="max-width: 180px;">
-                        <label class="form-label mb-0 fw-semibold text-muted small">GO</label>
-                        <input type="number"
-                               name="page"
-                               class="form-control form-control-sm px-3 py-1"
-                               min="1"
-                               max="<%= totalPages %>"
-                               value="<%= currentPage %>"
-                               style="width: 65px; font-size: 0.85rem;"
-                               required>
-                        <button type="submit" class="btn btn-primary btn-sm px-2 py-1 fw-bold">
-                            <i class="fas fa-arrow-right me-1"></i>GO
-                        </button>
-                    </form>
-                </div>
-            </div>
 
+        <!-- LEFT: GO TO PAGE -->
+        <div>
+            <form action="students" method="POST" class="d-flex align-items-center gap-1 p-1 bg-white shadow-sm border rounded-2" style="max-width: 180px;">
+                <label class="form-label mb-0 fw-semibold text-muted small">GO</label>
+                <input type="hidden" name="search" value="<%= request.getParameter("search") != null ? request.getParameter("search") : ""  %>">
+                <input type="number"
+                       name="page"
+                       class="form-control form-control-sm px-3 py-1"
+                       min="1"
+                       max="<%= totalPages %>"
+                       value="<%= currentPage %>"
+                       style="width: 65px; font-size: 0.85rem;"
+                       required>
+                <button type="submit" class="btn btn-primary btn-sm px-2 py-1 fw-bold">
+                    <i class="fas fa-arrow-right me-1"></i>GO
+                </button>
+            </form>
         </div>
-             <div class="ms-4 mt-3">  <!-- ms-4 = 24px left margin -->
-                 <form action="students?page=<%= currentPage%>" method="GET" class="d-flex align-items-center ms-4 mt-3gap-2 p-2 bg-white border rounded-3 shadow-sm" style="max-width: 280px;">
-                     <span class="text-muted fw-semibold small">Show</span>
-                     <select name="pagesize" class="form-select form-select-sm border-primary shadow-none"
-                             onchange="this.form.submit()" style="width: 80px;">
-                         <option value="5" <%= (pagesize==5) ? "selected" : "" %>>5</option>
-                         <option value="10" <%= (pagesize==10) ? "selected" : "" %>>10</option>
-                         <option value="20" <%= (pagesize==20) ? "selected" : "" %>>20</option>
-                         <option value="50" <%= (pagesize==50) ? "selected" : "" %>>50</option>
-                         <option value="100" <%= (pagesize==100) ? "selected" : "" %>>100</option>
-                         <option value="200" <%= (pagesize==200) ? "selected" : "" %>>200</option>
-                     </select>
-                     <span class="text-muted fw-semibold small">entries</span>
-                 </form>
-             </div>
 
+        <!-- CENTER: SEARCH BAR -->
+        <div>
+            <form action="students" method="GET" class="d-flex align-items-center gap-1 p-2 bg-white border rounded-3 shadow-sm" style="max-width: 320px;">
+                <input type="hidden" name="pagesize" value="<%= pagesize %>">
+                <input type="hidden" name="page" value="1">
+                <i class="bi bi-search text-muted small ms-1"></i>
+                <input type="text"
+                       name="search"
+                       class="form-control form-control-sm border-0 shadow-none"
+                       placeholder="Search name, email, mobile…"
+                       value="<%= request.getParameter("search") != null ? request.getParameter("search") : "" %>"
+                       style="min-width: 200px; font-size: 0.85rem;">
+                <button type="submit" class="btn btn-primary btn-sm px-2 py-1 fw-bold">
+                    <i class="fas fa-search"></i>
+                </button>
+                <% if (request.getParameter("search") != null && !request.getParameter("search").isEmpty()) { %>
+                <a href="students?page=1&pagesize=<%= pagesize %>" class="btn btn-outline-secondary btn-sm px-2 py-1" title="Clear search">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+                <% } %>
+            </form>
+        </div>
+
+        <!-- RIGHT: PAGE SIZE -->
+        <div>
+            <form action="students?page=<%= currentPage %>&" method="GET" class="d-flex align-items-center gap-2 p-2 bg-white border rounded-3 shadow-sm" style="max-width: 280px;">
+                <span class="text-muted fw-semibold small">Show</span>
+                 <input type="hidden" name="search" value="<%= request.getParameter("search") != null ? request.getParameter("search") : ""  %>">
+                <select name="pagesize" class="form-select form-select-sm border-primary shadow-none"
+                        onchange="this.form.submit()" style="width: 80px;">
+                    <option value="5"   <%= (pagesize==5)   ? "selected" : "" %>>5</option>
+                    <option value="10"  <%= (pagesize==10)  ? "selected" : "" %>>10</option>
+                    <option value="20"  <%= (pagesize==20)  ? "selected" : "" %>>20</option>
+                    <option value="50"  <%= (pagesize==50)  ? "selected" : "" %>>50</option>
+                    <option value="100" <%= (pagesize==100) ? "selected" : "" %>>100</option>
+                    <option value="200" <%= (pagesize==200) ? "selected" : "" %>>200</option>
+                </select>
+                <span class="text-muted fw-semibold small">entries</span>
+            </form>
+        </div>
 
       </div>
 
@@ -240,14 +264,14 @@
                 <ul class="pagination justify-content-center">
                     <!-- First Page -->
                     <li class="page-item <%= (currentPage == 1) ? "disabled" : "" %>">
-                        <a class="page-link" href="students?page=1&pagesize=<%=pagesize%>">
+                        <a class="page-link" href="students?page=1&pagesize=<%=pagesize%>&search=<%= request.getParameter("search") != null ? request.getParameter("search") : ""  %>">
                             <i class="fas fa-angle-double-left me-1"></i>First
                         </a>
                     </li>
 
                     <!-- Previous Page -->
                     <li class="page-item <%= (currentPage == 1) ? "disabled" : "" %>">
-                        <a class="page-link" href=" students?page=<%= currentPage - 1%>&pagesize=<%= pagesize %>">
+                        <a class="page-link" href=" students?page=<%= currentPage - 1%>&pagesize=<%= pagesize %>&search=<%= request.getParameter("search") != null ? request.getParameter("search") : ""  %>">
                             <i class="fas fa-chevron-left me-1"></i>
                         </a>
                     </li>
@@ -255,20 +279,22 @@
                     <!-- Page Numbers -->
                     <% for(int i=1; i<=totalPages; i++) { %>
                         <li class="page-item <%= i==currentPage ? "active" : "" %>">
-                            <a class="page-link" href="students?page=<%= i %>&pagesize=<%= pagesize %>"><%= i %></a>
+                            <a class="page-link" href="students?page=<%= i %>&pagesize=<%= pagesize %>&search=<%= request.getParameter("search") != null ? request.getParameter("search") : ""  %>">
+                               <%= i %>
+                            </a>
                         </li>
                     <% } %>
 
                     <!-- Next Page -->
                     <li class="page-item <%= (currentPage == totalPages) ? "disabled" : "" %>">
-                        <a class="page-link" href="students?page=<%= currentPage + 1%>&pagesize=<%= pagesize  %>">
+                        <a class="page-link" href="students?page=<%= currentPage + 1%>&pagesize=<%= pagesize  %>&search=<%= request.getParameter("search") != null ? request.getParameter("search") : ""  %>">
                             <i class="fas fa-chevron-right me-1"></i>
                         </a>
                     </li>
 
                     <!-- Last Page -->
                     <li class="page-item <%= (currentPage == totalPages) ? "disabled" : "" %>">
-                        <a class="page-link" href="students?page=<%= totalPages%>&pagesize=<%= pagesize  %>">
+                        <a class="page-link" href="students?page=<%= totalPages%>&pagesize=<%= pagesize  %>&search=<%= request.getParameter("search") != null ? request.getParameter("search") : ""  %>">
                             Last <i class="fas fa-angle-double-right ms-1"></i>
                         </a>
                     </li>
